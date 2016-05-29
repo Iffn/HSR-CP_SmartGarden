@@ -24,24 +24,27 @@ def getValuesAndPublsih():
         ser.write('1&')
 
         #Arduino sends messages
-		myTrash = int(ser.readline()) #unused String, easier this way due to Arduino program
-        recTemp = int(ser.readline())
-        recHumAir = int(ser.readline())
+        
+        myTrashString = ser.readline()
+        #recTemp = int(ser.readline())
+        #print(recTemp)
+        #recHumAir = int(ser.readline())
+        #print(recHumAir)
         recHumEarth = int(ser.readline())
+        print(recHumEarth)
         recLight = int(ser.readline())
-
+        print(recLight)
+        
         #publish
 		
-        sendString = "Temperature: " + str(recTemp) + " ; Humidity Air: " + str(recHumAir) + " ; Humidity Earth: " + str(recHumEarth) + " ; Light: " + str(recLight)
+        sendString =  " ; Humidity Earth: " + str(recHumEarth) + " ; Light: " + str(recLight)
+        #""" "Temperature: " + str(recTemp) + " ; Humidity Air: " + str(recHumAir) +"""
         publish.single("/SmartGarden/Station1", sendString, hostname=publisherAdress)
 		
 		
 	#Console Output
         
-        print(recTemp)
-        print(recHumAir)
-        print(recHumEarth)
-        print(recLight)
+        
 
 
 
@@ -49,11 +52,11 @@ import serial,time,urllib
 from datetime import datetime
 import paho.mqtt.publish as publish
 
-ser = serial.Serial('/dev/ttyACM1',9600)
+ser = serial.Serial('/dev/ttyACM0',9600)
 
 #User defined Data:
-getDataIntervall = 2 #in minutes, minimum 2
-sendWeatherIntervall = 2 #in hours, minimum 2
+getDataIntervall = 19 #in minutes, minimum 2
+sendWeatherIntervall = 19 #in hours, minimum 2
 key = "175092546d1fd315293a5d9d3ec40c99" #use your own key
 locLat = "47.2267" #position rapperswil -> gets zurich
 locLong = "08.8167"
@@ -68,7 +71,7 @@ print("setup complete")
 
 while(1):
         #Get Data from Arduino
-        if(datetime.now().minute%getDataIntervall==0):
+        if(datetime.now().second%getDataIntervall==0):
                 if(gotValues == False):
                         print("getValues")
                         getValuesAndPublsih()
@@ -77,7 +80,7 @@ while(1):
                 gotValues = False
                 
         #Get and process weather data
-        if(datetime.now().minute%sendWeatherIntervall==1):
+        if(datetime.now().second%sendWeatherIntervall==10):
                 if(sentWeather == False):
                         print("getRainData")
                         sendRainState()
