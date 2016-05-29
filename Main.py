@@ -57,7 +57,7 @@ ser = serial.Serial('/dev/ttyACM0',9600)
 #User defined Data:
 getDataIntervall = 19 #in minutes, minimum 2
 sendWeatherIntervall = 19 #in hours, minimum 2
-key = "175092546d1fd315293a5d9d3ec40c99" #use your own key
+key = "" #use your own key from https://developer.forecast.io/
 locLat = "47.2267" #position rapperswil -> gets zurich
 locLong = "08.8167"
 publisherAdress = "localhost"
